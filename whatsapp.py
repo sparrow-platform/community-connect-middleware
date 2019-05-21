@@ -11,10 +11,10 @@ account_sid = config["twilio"]["account_sid"]
 auth_token = config["twilio"]["auth_token"]
 client = Client(account_sid, auth_token)
 
-message = client.messages.create(
-                              body='Let me know if this message reaches you',
-                              from_=config["twilio"]["whatsapp_no"],
-                              to='whatsapp:+91xxxx'
-                          )
-
-print(message.sid)
+def send_message(message, to_no):
+    message = client.messages.create(
+                                  body=message,
+                                  from_=config["twilio"]["whatsapp_no"],
+                                  to=to_no
+                              )
+    print(message.sid)
