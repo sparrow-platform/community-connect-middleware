@@ -1,6 +1,7 @@
 import json
 import pymongo
 import chatbot
+from datetime import datetime
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -18,6 +19,6 @@ def getSessionID(userID):
         return user['sessionID']
     else:
         session = chatbot.new_session()
-        my_dic = {'userID':userID, 'sessionID':session}
+        my_dic = {'userID':userID, 'sessionID':session, 'created_at': datetime.utcnow()}
         mycol.insert_one(my_dic)
         return session
