@@ -1,0 +1,19 @@
+{
+  "ibm_assistant":{
+    "workspace_id":"xxxx",
+    "assistant_id":"xxxx",
+    "iam_apikey":"xxxx",
+    "url":"https://gateway.watsonplatform.net/assistant/api"
+  },
+
+  "twilio":{
+    "account_sid":"ACxxxx",
+    "auth_token":"xxxx",
+    "whatsapp_no":"+14xxx"
+  },
+  "mongo":{
+    "client":"mongodb://localhost:27017/",
+    
+  }
+
+}

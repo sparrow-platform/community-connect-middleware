@@ -3,12 +3,15 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 import ibm_watson
+import json
 
+with open('config.json') as config_file:
+    config = json.load(config_file)
 
 assistant = ibm_watson.AssistantV1(
     version='2019-02-28',
-    iam_apikey='xxxx',
-    url='https://gateway.watsonplatform.net/assistant/api'
+    iam_apikey=config["ibm_assistant"]["iam_apikey"],
+    url=config["ibm_assistant"]["url"]
 )
 
 
@@ -21,7 +24,7 @@ def sms_reply():
     from_no = request.values.get('From', None)
     print(message, from_no)
     response = assistant.message(
-    workspace_id='xxxx',
+    workspace_id=config["ibm_assistant"]["workspace_id"],
         input={
             'text': message
         }

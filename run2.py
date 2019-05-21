@@ -4,12 +4,16 @@ import json
 import ibm_watson
 import pymongo
 
+with open('config.json') as config_file:
+    config = json.load(config_file)
+
+
 service = ibm_watson.AssistantV2(
-    iam_apikey='xxxx',
+    iam_apikey=config["ibm_assistant"]["iam_apikey"],
     version='2019-02-28',
-    url='https://gateway.watsonplatform.net/assistant/api'
+    url=config["ibm_assistant"]["url"]
 )
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+myclient = pymongo.MongoClient(config["mongo"]["client"])
 mydb = myclient["sparrow"]
 mycol = mydb["sessions"]
 
@@ -22,7 +26,7 @@ def listen_input():
     print(message, from_no)
     session = getSessionID(from_no)
     response = service.message(
-        assistant_id='xxxx',
+        assistant_id=config["ibm_assistant"]["assistant_id"],
         session_id=session,
         input={
             'message_type': 'text',
@@ -52,18 +56,15 @@ def getSessionID(userID):
         return user['sessionID']
     else:
         response = service.create_session(
-            assistant_id='xxxx'
+            assistant_id=config["ibm_assistant"]["assistant_id"]
         ).get_result()
         print(json.dumps(response, indent=2))
         session = response["session_id"]
-        
+
         my_dic = {'userID':userID, 'sessionID':session}
         mycol.insert_one(my_dic)
         return session
 
 if __name__ == "__main__":
-    
+
     app.run(debug=True)
-
-
-
