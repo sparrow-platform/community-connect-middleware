@@ -18,7 +18,7 @@ def listen_input():
 
     receiver = db.getReceiver(from_no)
     if receiver == db.IBM_RECEIVER:
-        reply = chatbot.get_reply(from_no, message)
+        reply = chatbot.handle_message(from_no, message)
         """Respond to incoming messages with a friendly SMS."""
         # Start our response
         resp = MessagingResponse()
@@ -26,7 +26,11 @@ def listen_input():
         resp.message(reply)
         return str(resp)
     else:
-        return
+        whatsapp.send_message(message, receiver)
+        resp = MessagingResponse()
+        # Add a messag
+        resp.message("Forwarded your message. Reply will be redirected to you")
+        return str(resp)
 
 if __name__ == "__main__":
 
