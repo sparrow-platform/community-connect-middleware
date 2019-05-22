@@ -3,6 +3,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 import json
 import whatsapp
 import chatbot
+import db
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -15,16 +16,17 @@ def listen_input():
     from_no = request.values.get('From', None)
     print(message, from_no)
 
-    reply = chatbot.get_reply(from_no, message)
-    """Respond to incoming messages with a friendly SMS."""
-    # Start our response
-    resp = MessagingResponse()
-
-    # Add a messag
-    resp.message(reply)
-
-    return str(resp)
-
+    receiver = db.getReceiver(from_no)
+    if receiver == db.IBM_RECEIVER:
+        reply = chatbot.get_reply(from_no, message)
+        """Respond to incoming messages with a friendly SMS."""
+        # Start our response
+        resp = MessagingResponse()
+        # Add a messag
+        resp.message(reply)
+        return str(resp)
+    else:
+        return
 
 if __name__ == "__main__":
 
