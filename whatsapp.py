@@ -11,7 +11,7 @@ account_sid = config["twilio"]["account_sid"]
 auth_token = config["twilio"]["auth_token"]
 client = Client(account_sid, auth_token)
 
-def send_message(message, to_no):
+def send_message(to_no, message):
     message = client.messages.create(
                                   body=message,
                                   from_=config["twilio"]["whatsapp_no"],

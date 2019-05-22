@@ -4,6 +4,7 @@ import json
 import whatsapp
 import chatbot
 import db
+import connect
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -18,6 +19,9 @@ def listen_input():
 
     receiver = db.getReceiver(from_no)
     if receiver == db.IBM_RECEIVER:
+        if connect.is_connect_requested(message):
+            connect.connect(from_no, message)
+            return str(MessagingResponse())
         reply = chatbot.handle_message(from_no, message)
         """Respond to incoming messages with a friendly SMS."""
         # Start our response
@@ -26,11 +30,11 @@ def listen_input():
         resp.message(reply)
         return str(resp)
     else:
-        whatsapp.send_message(message, receiver)
-        resp = MessagingResponse()
-        # Add a messag
-        resp.message("Forwarded your message. Reply will be redirected to you")
-        return str(resp)
+        if connect.is_stop_requested(message):
+            connect.disconnect(from_no, receiver)
+            return str(MessagingResponse())
+        whatsapp.send_message(receiver, message)
+        return str(MessagingResponse())
 
 if __name__ == "__main__":
 
