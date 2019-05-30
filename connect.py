@@ -1,6 +1,6 @@
 import json
 import db
-import whatsapp
+import twilio_messaging as messaging
 
 def is_connect_doctor(message):
     if message.lower() == "connect to doctor":
@@ -20,18 +20,18 @@ def connect(userID, message):
         doctor = db.findDoctor(userID)
         if doctor:
             db.setupConnection(userID, doctor)
-            whatsapp.send_message(userID, "We have connected you to a doctor")
-            whatsapp.send_message(doctor, "We have connected you to a user")
+            messaging.send_message(userID, "We have connected you to a doctor")
+            messaging.send_message(doctor, "We have connected you to a user")
         else:
-            whatsapp.send_message(userID, "No doctors are available")
+            messaging.send_message(userID, "No doctors are available")
     elif is_connect_community(message):
         community = db.findCommunity(userID)
         if community:
             db.setupConnection(userID, community)
-            whatsapp.send_message(userID, "We have connected you to a member")
-            whatsapp.send_message(community, "We have connected you to a user")
+            messaging.send_message(userID, "We have connected you to a member")
+            messaging.send_message(community, "We have connected you to a user")
         else:
-            whatsapp.send_message(userID, "No members are available")
+            messaging.send_message(userID, "No members are available")
 
 def is_stop_requested(message):
     if message.lower() == "disconnect":
@@ -40,5 +40,5 @@ def is_stop_requested(message):
 
 def disconnect(user1, user2):
     db.breakConnection(user1, user2)
-    whatsapp.send_message(user1, "You have been disconnected")
-    whatsapp.send_message(user2, "The other party disconnected")
+    messaging.send_message(user1, "You have been disconnected")
+    messaging.send_message(user2, "The other party disconnected")

@@ -9,16 +9,17 @@
   "twilio":{
     "account_sid":"ACxxxx",
     "auth_token":"xxxx",
-    "whatsapp_no":"+14xxx"
+    "whatsapp_no":"whatsapp:xxxx",
+    "messenger_no":"messenger:xxxx"
   },
   "mongo":{
     "client":"mongodb://localhost:27017/",
-    
+
   },
   "couch":{
-    "client":" ",
+    "api":" ",
     "username":" ",
-    "password":" "  
+    "password":" "
   }
 
 }

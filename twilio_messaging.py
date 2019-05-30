@@ -12,9 +12,14 @@ auth_token = config["twilio"]["auth_token"]
 client = Client(account_sid, auth_token)
 
 def send_message(to_no, message):
+    from_no = ""
+    if to_no.startswith('whatsapp'):
+        from_no = config["twilio"]["whatsapp_no"]
+    elif to_no.startswith('messenger'):
+        from_no = config["twilio"]["messenger_no"]
     message = client.messages.create(
                                   body=message,
-                                  from_=config["twilio"]["whatsapp_no"],
+                                  from_=from_no,
                                   to=to_no
                               )
     print(message.sid)

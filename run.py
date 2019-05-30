@@ -1,7 +1,7 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 import json
-import whatsapp
+import twilio_messaging as messaging
 import chatbot
 import db
 import connect
@@ -33,7 +33,7 @@ def listen_input():
         if connect.is_stop_requested(message):
             connect.disconnect(from_no, receiver)
             return str(MessagingResponse())
-        whatsapp.send_message(receiver, message)
+        messaging.send_message(receiver, message)
         return str(MessagingResponse())
 
 if __name__ == "__main__":
