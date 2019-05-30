@@ -70,7 +70,6 @@ def breakConnection(user1, user2):
 
 
 def findDoctor(userID):
-    #TODO Check if self is not returned
     for user in usersDB:
         if user['_id'] != userID and user['type'] == TYPE_DOCTOR and user['receiver'] == IBM_RECEIVER:
             return user['_id']
