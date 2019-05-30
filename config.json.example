@@ -14,6 +14,11 @@
   "mongo":{
     "client":"mongodb://localhost:27017/",
     
+  },
+  "couch":{
+    "client":" ",
+    "username":" ",
+    "password":" "  
   }
 
 }
