@@ -69,17 +69,17 @@ def breakConnection(user1, user2):
     return True
 
 
-def findDoctor():
+def findDoctor(userID):
     #TODO Check if self is not returned
     for user in usersDB:
-        if user['type'] == TYPE_DOCTOR and user['receiver'] == IBM_RECEIVER:
+        if user['_id'] != userID and user['type'] == TYPE_DOCTOR and user['receiver'] == IBM_RECEIVER:
             return user['_id']
     return None
 
 
-def findCommunity():
+def findCommunity(userID):
     for user in usersDB:
-        if user['type'] == TYPE_COMMUNITY and user['receiver'] == IBM_RECEIVER:
+        if user['_id'] != userID and user['type'] == TYPE_COMMUNITY and user['receiver'] == IBM_RECEIVER:
             return user['_id']
     return None
 

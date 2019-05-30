@@ -17,7 +17,7 @@ def is_connect_requested(message):
 
 def connect(userID, message):
     if is_connect_doctor(message):
-        doctor = db.findDoctor()
+        doctor = db.findDoctor(userID)
         if doctor:
             db.setupConnection(userID, doctor)
             whatsapp.send_message(userID, "We have connected you to a doctor")
@@ -25,7 +25,7 @@ def connect(userID, message):
         else:
             whatsapp.send_message(userID, "No doctors are available")
     elif is_connect_community(message):
-        community = db.findCommunity()
+        community = db.findCommunity(userID)
         if community:
             db.setupConnection(userID, community)
             whatsapp.send_message(userID, "We have connected you to a member")
