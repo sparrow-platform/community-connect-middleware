@@ -10,7 +10,8 @@
     "account_sid":"ACxxxx",
     "auth_token":"xxxx",
     "whatsapp_no":"whatsapp:xxxx",
-    "messenger_no":"messenger:xxxx"
+    "messenger_no":"messenger:xxxx",
+    "number":""
   },
   "mongo":{
     "client":"mongodb://localhost:27017/",

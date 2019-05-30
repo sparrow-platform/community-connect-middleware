@@ -17,6 +17,8 @@ def send_message(to_no, message):
         from_no = config["twilio"]["whatsapp_no"]
     elif to_no.startswith('messenger'):
         from_no = config["twilio"]["messenger_no"]
+    else:
+        from_no = config["twilio"]["number"]
     message = client.messages.create(
                                   body=message,
                                   from_=from_no,
