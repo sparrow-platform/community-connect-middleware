@@ -7,6 +7,7 @@ import chatbot
 import db
 import connect
 import visual_recognition as vr
+import nlp
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -84,10 +85,25 @@ def handle_mqtt_message(client, userdata, message):
 @app.route("/visual_recognition/text", methods=['POST'])
 def recognize_text():
     image_url = request.values.get('image_url', None)
-    print(image_url)
+    # print(image_url)
     text = vr.get_text_from_image(image_url)
     #return jsonify({'text':text})
     return text
+
+@app.route("/nlp/sentiment", methods=['POST'])
+def sentiment_of_text():
+    text = request.values.get('text', None)
+    sentiment = nlp.get_sentiment_emotions(text)
+    #return jsonify({'text':text})
+    return jsonify(sentiment)
+
+@app.route("/nlp/entities", methods=['POST'])
+def entities_of_text():
+    text = request.values.get('text', None)
+    entities = nlp.get_entities(text)
+    #return jsonify({'text':text})
+    return jsonify(entities)
+
 
 if __name__ == "__main__":
     app.run(debug=False)

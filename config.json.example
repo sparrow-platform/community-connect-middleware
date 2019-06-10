@@ -25,6 +25,13 @@
   "mqtt":{
     "broker":"xxxx",
     "port":1883
+  },
+  "ibm_visual_recognition":{
+    "apikey":"xxxx"
+  },
+  "ibm_nlp":{
+    "apikey":"xxxx",
+    "url":"https://gateway.watsonplatform.net/natural-language-understanding/api"
   }
 
 }
