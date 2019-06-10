@@ -21,6 +21,10 @@
     "api":" ",
     "username":" ",
     "password":" "
+  },
+  "mqtt":{
+    "broker":"xxxx",
+    "port":1883
   }
 
 }

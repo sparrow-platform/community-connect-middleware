@@ -1,6 +1,7 @@
 # Download the helper library from https://www.twilio.com/docs/python/install
 from twilio.rest import Client
 import json
+import mqtt_messaging
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -17,6 +18,9 @@ def send_message(to_no, message):
         from_no = config["twilio"]["whatsapp_no"]
     elif to_no.startswith('messenger'):
         from_no = config["twilio"]["messenger_no"]
+    elif to_no.startswith('sparrow'):
+        mqtt_messaging.send_message(to_no, message)
+        return
     else:
         from_no = config["twilio"]["number"]
     message = client.messages.create(
