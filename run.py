@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_mqtt import Mqtt
 from twilio.twiml.messaging_response import MessagingResponse
 import json
@@ -6,7 +6,7 @@ import twilio_messaging as messaging
 import chatbot
 import db
 import connect
-# import mqtt_mesh
+import visual_recognition as vr
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -19,7 +19,7 @@ app.config['MQTT_BROKER_PORT'] = config["mqtt"]["port"]
 app.config['MQTT_REFRESH_TIME'] = 1.0  # refresh time in seconds
 mqtt = Mqtt(app)
 
-@app.route("/receive", methods=['GET', 'POST'])
+@app.route("/middleware/receive", methods=['GET', 'POST'])
 def listen_input():
     message = request.values.get('Body', None)
     from_no = request.values.get('From', None)
@@ -81,7 +81,13 @@ def handle_mqtt_message(client, userdata, message):
         messaging.send_message(receiver, message)
         return
 
-
+@app.route("/visual_recognition/text", methods=['POST'])
+def recognize_text():
+    image_url = request.values.get('image_url', None)
+    print(image_url)
+    text = vr.get_text_from_image(image_url)
+    #return jsonify({'text':text})
+    return text
 
 if __name__ == "__main__":
     app.run(debug=False)
