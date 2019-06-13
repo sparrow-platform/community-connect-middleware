@@ -33,13 +33,26 @@ def listen_input():
     from_no = request.values.get('From', None)
     print(message, from_no)
 
+    #Handling Media content
+    num_media = int(request.values.get("NumMedia"))
+    if num_media > 0:
+        media_url = request.values.get(f'MediaUrl0')
+        mime_type = request.values.get(f'MediaContentType0')
+        print(media_url, mime_type)
+        if num_media > 1:
+            messaging.send_message(from_no, "Multiple media cannot be sent. Sending only first media")
+
     receiver = db.getReceiver(from_no)
     if receiver == db.IBM_RECEIVER:
         if connect.is_connect_requested(message):
             connect.connect(from_no, message)
             return str(MessagingResponse())
-        reply = chatbot.handle_message(from_no, message)
-        """Respond to incoming messages with a friendly SMS."""
+        if num_media > 0:
+            reply = "Sorry! Our Automated chatbot doesn't support Media at this point."
+        elif message == "":
+            reply = "Your message is empty!"
+        else:
+            reply = chatbot.handle_message(from_no, message)
         # Start our response
         resp = MessagingResponse()
         # Add a messag
@@ -49,7 +62,12 @@ def listen_input():
         if connect.is_stop_requested(message):
             connect.disconnect(from_no, receiver)
             return str(MessagingResponse())
-        messaging.send_message(receiver, message)
+        if num_media > 0:
+            messaging.send_message_with_media(from_no, receiver, message, media_url, mime_type)
+        elif message == "":
+            messaging.send_message(from_no, "Invalid message. Can't be sent")
+        else:
+            messaging.send_message(receiver, message)
         return str(MessagingResponse())
 
 @mqtt.on_connect()

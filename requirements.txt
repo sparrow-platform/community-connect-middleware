@@ -1,5 +1,5 @@
 cloudant==2.12.0
-Flask==0.12.2
+Flask==0.12.3
 Flask-MQTT==1.0.5
 ibm-cloud-sdk-core==0.4.2
 ibm-watson==3.0.4
