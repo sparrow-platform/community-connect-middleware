@@ -8,6 +8,7 @@ import db
 import connect
 import visual_recognition as vr
 import nlp
+import os
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -19,6 +20,12 @@ app.config['MQTT_BROKER_PORT'] = config["mqtt"]["port"]
 # app.config['MQTT_PASSWORD'] = 'secret'
 app.config['MQTT_REFRESH_TIME'] = 1.0  # refresh time in seconds
 mqtt = Mqtt(app)
+
+cf_port = os.getenv("PORT")
+
+@app.route('/')
+def route():
+    return "hello ibm new"
 
 @app.route("/middleware/receive", methods=['GET', 'POST'])
 def listen_input():
@@ -106,4 +113,7 @@ def entities_of_text():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    if cf_port is None:
+        app.run(host='0.0.0.0', port=5000, debug=False)
+    else:
+        app.run(host='0.0.0.0', port=int(cf_port), debug=False)
