@@ -44,13 +44,17 @@ def listen_input():
         if num_media > 1:
             messaging.send_message(from_no, "Multiple media cannot be sent. Sending only first media")
 
+    #Handling @sparrow commands
     if sparrow.is_sparrow_request(message):
         sparrow.handle_sparrow_request(from_no, message)
         return str(MessagingResponse())
 
     receiver = db.getReceiver(from_no)
     if receiver == db.IBM_RECEIVER:
-        if num_media > 0:
+        if sparrow.is_command(message):
+            sparrow.handle_command(from_no, message)
+            return str(MessagingResponse())
+        elif num_media > 0:
             reply = "Sorry! Our Automated chatbot doesn't support Media at this point."
         elif message == "":
             reply = "Invalid format. Your message is empty!"
@@ -96,8 +100,11 @@ def handle_mqtt_message(client, userdata, message):
     receiver = db.getReceiver(from_no)
     print(receiver)
     if receiver == db.IBM_RECEIVER:
+        if sparrow.is_command(message):
+            sparrow.handle_command(from_no, message)
+            return str(MessagingResponse())
+
         reply = chatbot.handle_message(from_no, message)
-        """Respond to incoming messages with a friendly SMS."""
         for message in reply:
             mqtt.publish(data["topic"].replace("receive", "response"), message)
             sleep(1)
