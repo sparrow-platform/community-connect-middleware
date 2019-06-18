@@ -9,6 +9,7 @@ import connect
 import visual_recognition as vr
 import nlp
 import os
+import sparrow_handler as sparrow
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -42,15 +43,16 @@ def listen_input():
         if num_media > 1:
             messaging.send_message(from_no, "Multiple media cannot be sent. Sending only first media")
 
+    if sparrow.is_sparrow_request(message):
+        sparrow.handle_sparrow_request(from_no, message)
+        return str(MessagingResponse())
+
     receiver = db.getReceiver(from_no)
     if receiver == db.IBM_RECEIVER:
-        if connect.is_connect_requested(message):
-            connect.connect(from_no, message)
-            return str(MessagingResponse())
         if num_media > 0:
             reply = "Sorry! Our Automated chatbot doesn't support Media at this point."
         elif message == "":
-            reply = "Your message is empty!"
+            reply = "Invalid format. Your message is empty!"
         else:
             reply = chatbot.handle_message(from_no, message)
         # Start our response
@@ -59,9 +61,6 @@ def listen_input():
         resp.message(reply)
         return str(resp)
     else:
-        if connect.is_stop_requested(message):
-            connect.disconnect(from_no, receiver)
-            return str(MessagingResponse())
         if num_media > 0:
             messaging.send_message_with_media(from_no, receiver, message, media_url, mime_type)
         elif message == "":
@@ -86,13 +85,13 @@ def handle_mqtt_message(client, userdata, message):
     from_no = data["topic"].split("/")[1]
     print(message, from_no)
 
+    if sparrow.is_sparrow_request(message):
+        sparrow.handle_sparrow_request(from_no, message)
+        return str(MessagingResponse())
+
     receiver = db.getReceiver(from_no)
     print(receiver)
     if receiver == db.IBM_RECEIVER:
-        if connect.is_connect_requested(message):
-            connect.connect(from_no, message)
-            return
-        print("")
         reply = chatbot.handle_message(from_no, message)
         """Respond to incoming messages with a friendly SMS."""
         # Send our response
@@ -101,9 +100,6 @@ def handle_mqtt_message(client, userdata, message):
         mqtt.publish(data["topic"].replace("receive", "response"), reply)
         return
     else:
-        if connect.is_stop_requested(message):
-            connect.disconnect(from_no, receiver)
-            return
         messaging.send_message(receiver, message)
         return
 

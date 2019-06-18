@@ -2,6 +2,7 @@
 from twilio.rest import Client
 import json
 import mqtt_messaging
+from time import sleep
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -13,6 +14,10 @@ MEDIA_SUPPORT_MESSENGER = ['image/jpeg']
 account_sid = config["twilio"]["account_sid"]
 auth_token = config["twilio"]["auth_token"]
 client = Client(account_sid, auth_token)
+def send_messages(to_no, messages):
+    for message in messages:
+        send_message(to_no, message)
+        sleep(1)
 
 def send_message(to_no, message):
     from_no = ""
