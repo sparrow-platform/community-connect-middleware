@@ -10,6 +10,7 @@ import visual_recognition as vr
 import nlp
 import os
 import sparrow_handler as sparrow
+from time import sleep
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -54,10 +55,13 @@ def listen_input():
         elif message == "":
             reply = "Invalid format. Your message is empty!"
         else:
-            reply = chatbot.handle_message(from_no, message)
-        # Start our response
+            replies = chatbot.handle_message(from_no, message)
+            if len(replies) > 1:
+                messaging.send_messages(from_no, replies)
+                return(str(MessagingResponse()))
+            else:
+                reply = replies[0]
         resp = MessagingResponse()
-        # Add a messag
         resp.message(reply)
         return str(resp)
     else:
@@ -94,10 +98,9 @@ def handle_mqtt_message(client, userdata, message):
     if receiver == db.IBM_RECEIVER:
         reply = chatbot.handle_message(from_no, message)
         """Respond to incoming messages with a friendly SMS."""
-        # Send our response
-        # reply = "Hello again"
-        print(reply)
-        mqtt.publish(data["topic"].replace("receive", "response"), reply)
+        for message in reply:
+            mqtt.publish(data["topic"].replace("receive", "response"), message)
+            sleep(1)
         return
     else:
         messaging.send_message(receiver, message)

@@ -26,7 +26,9 @@ def handle_message(from_no, message):
         db.updateUserType(from_no, db.TYPE_COMMUNITY)
 
     reply = response["output"]["generic"][0]["text"]
-    return reply
+    #Split message on <#>
+    replies = reply.split('<#>')
+    return replies
 
 
 
