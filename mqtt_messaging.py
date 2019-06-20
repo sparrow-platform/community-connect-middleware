@@ -1,17 +1,27 @@
-import paho.mqtt.client as paho
+import requests
 import json
-
+import os
+from time import sleep
 with open('config.json') as config_file:
     config = json.load(config_file)
 
-broker=config["mqtt"]["broker"]
-port=config["mqtt"]["port"]
+URL = "http://localhost:"
 
+cf_port = os.getenv("PORT")
+if cf_port == None:
+    URL+=str(5000)
+else:
+    URL+=str(cf_port)
+
+URL+= "/mqtt/publish"
 
 def send_message(userID, message):
-    client= paho.Client("sparrow-middleware")
-    client.connect(broker,port)
     topic = "sparrow_response/"+userID
-    ret  = client.publish(topic,message)
-    print(ret, topic, message)
-    client.disconnect()
+    PARAMS = {
+        'topic':topic,
+        'message': message
+    }
+    print("making request", URL)
+    r = requests.post(url = URL, params = PARAMS)
+    data = r.json()
+    print(data)

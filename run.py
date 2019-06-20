@@ -135,6 +135,27 @@ def entities_of_text():
     #return jsonify({'text':text})
     return jsonify(entities)
 
+@mqtt.on_log()
+def handle_logging(client, userdata, level, buf):
+    if level == MQTT_LOG_ERR:
+        print('Error: {}'.format(buf))
+
+broker=config["mqtt"]["broker"]
+port=config["mqtt"]["port"]
+import paho.mqtt.client as paho
+@app.route("/mqtt/publish", methods=['POST'])
+def publishMQTT():
+    topic = request.values.get('topic', None)
+    message = request.values.get('message', None)
+    # print(topic, message)
+    # mqtt.publish(topic, message)
+    client= paho.Client("sparrow-middleware")
+    client.connect(broker,port)
+    # topic = "sparrow_response/"+userID
+    ret  = client.publish(topic,message)
+    print(ret, topic, message)
+    client.disconnect()
+    return jsonify({'success':True})
 
 if __name__ == "__main__":
     if cf_port is None:
