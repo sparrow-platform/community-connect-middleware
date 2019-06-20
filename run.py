@@ -143,29 +143,6 @@ def entities_of_text():
     #return jsonify({'text':text})
     return jsonify(entities)
 
-<<<<<<< HEAD
-=======
-@mqtt.on_log()
-def handle_logging(client, userdata, level, buf):
-    if level == MQTT_LOG_ERR:
-        print('Error: {}'.format(buf))
-
-
-@app.route("/mqtt/publish", methods=['POST'])
-def publishMQTT():
-    topic = request.values.get('topic', None)
-    message = request.values.get('message', None)
-
-    try:
-        publish.single(topic, message, hostname=mqttPublishBroker)
-        print("API call triggered Publish MQTT publish " , topic, message)
-        return jsonify({'success':True})
-    except:
-        return "{\"message\" : \"Server Error\"}"
-    
-    
-    
->>>>>>> 9b72d6b6f08203e083ce2a3b7d9b381e5b5def6c
 
 if __name__ == "__main__":
 
