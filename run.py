@@ -12,16 +12,24 @@ import os
 import sparrow_handler as sparrow
 from time import sleep
 
+import paho.mqtt.publish as publish
+
 with open('config.json') as config_file:
     config = json.load(config_file)
 
 app = Flask(__name__)
 app.config['MQTT_BROKER_URL'] = config["mqtt"]["broker"]
 app.config['MQTT_BROKER_PORT'] = config["mqtt"]["port"]
+app.config['MQTT_REFRESH_TIME'] = 1.0  # refresh time in seconds
 # app.config['MQTT_USERNAME'] = 'user'
 # app.config['MQTT_PASSWORD'] = 'secret'
-app.config['MQTT_REFRESH_TIME'] = 1.0  # refresh time in seconds
+
 mqtt = Mqtt(app)
+
+mqttPublishBroker=config["mqtt"]["broker"]
+mqttPublishPort=config["mqtt"]["port"]
+
+flag_connected = 0
 
 cf_port = os.getenv("PORT")
 
@@ -140,25 +148,26 @@ def handle_logging(client, userdata, level, buf):
     if level == MQTT_LOG_ERR:
         print('Error: {}'.format(buf))
 
-broker=config["mqtt"]["broker"]
-port=config["mqtt"]["port"]
-import paho.mqtt.client as paho
+
 @app.route("/mqtt/publish", methods=['POST'])
 def publishMQTT():
     topic = request.values.get('topic', None)
     message = request.values.get('message', None)
-    # print(topic, message)
-    # mqtt.publish(topic, message)
-    client= paho.Client("sparrow-middleware")
-    client.connect(broker,port)
-    # topic = "sparrow_response/"+userID
-    ret  = client.publish(topic,message)
-    print(ret, topic, message)
-    client.disconnect()
-    return jsonify({'success':True})
+
+    try:
+        publish.single(topic, message, hostname=mqttPublishBroker)
+        print("API call triggered Publish MQTT publish " , topic, message)
+        return jsonify({'success':True})
+    except:
+        return "{\"message\" : \"Server Error\"}"
+    
+    
+    
 
 if __name__ == "__main__":
+
     if cf_port is None:
         app.run(host='0.0.0.0', port=5000, debug=False)
     else:
         app.run(host='0.0.0.0', port=int(cf_port), debug=False)
+
