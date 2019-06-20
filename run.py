@@ -143,6 +143,8 @@ def entities_of_text():
     #return jsonify({'text':text})
     return jsonify(entities)
 
+<<<<<<< HEAD
+=======
 @mqtt.on_log()
 def handle_logging(client, userdata, level, buf):
     if level == MQTT_LOG_ERR:
@@ -163,6 +165,7 @@ def publishMQTT():
     
     
     
+>>>>>>> 9b72d6b6f08203e083ce2a3b7d9b381e5b5def6c
 
 if __name__ == "__main__":
 
