@@ -18,13 +18,6 @@ def handle_message(from_no, message):
     response =  get_response(from_no, message)
     #print(json.dumps(response, indent=2))
 
-    #Handle registration intents
-    intent = response["output"]["intents"][0]["intent"]
-    if intent == INTENT_DOCTOR:
-        db.updateUserType(from_no, db.TYPE_DOCTOR)
-    elif intent == INTENT_COMMUNITY:
-        db.updateUserType(from_no, db.TYPE_COMMUNITY)
-
     reply = response["output"]["generic"][0]["text"]
     #Split message on <#>
     replies = reply.split('<#>')
