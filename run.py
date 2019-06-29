@@ -11,7 +11,7 @@ import nlp
 import os
 import sparrow_handler as sparrow
 from time import sleep
-
+from threading import Thread
 import paho.mqtt.publish as publish
 
 with open('config.json') as config_file:
@@ -54,13 +54,16 @@ def listen_input():
 
     #Handling @sparrow commands
     if sparrow.is_sparrow_request(message):
-        sparrow.handle_sparrow_request(from_no, message)
+        t = Thread(target=sparrow.handle_sparrow_request, args=(from_no, message,))
+        t.start()
+        # sparrow.handle_sparrow_request(from_no, message)
         return str(MessagingResponse())
 
     receiver = db.getReceiver(from_no)
     if receiver == db.IBM_RECEIVER:
         if sparrow.is_command(message):
-            sparrow.handle_command(from_no, message)
+            t = Thread(target=sparrow.handle_command, args=(from_no, message))
+            t.start()
             return str(MessagingResponse())
         elif num_media > 0:
             reply = "Sorry! Our Automated chatbot doesn't support Media at this point."
@@ -69,7 +72,8 @@ def listen_input():
         else:
             replies = chatbot.handle_message(from_no, message)
             if len(replies) > 1:
-                messaging.send_messages(from_no, replies)
+                t = Thread(target=messaging.send_messages, args=(from_no, replies))
+                t.start()
                 return(str(MessagingResponse()))
             else:
                 reply = replies[0]
@@ -103,19 +107,19 @@ def handle_mqtt_message(client, userdata, message):
 
     if sparrow.is_sparrow_request(message):
         sparrow.handle_sparrow_request(from_no, message)
-        return str(MessagingResponse())
+        return
 
     receiver = db.getReceiver(from_no)
     print(receiver)
     if receiver == db.IBM_RECEIVER:
         if sparrow.is_command(message):
             sparrow.handle_command(from_no, message)
-            return str(MessagingResponse())
+            return
 
         reply = chatbot.handle_message(from_no, message)
         for message in reply:
             mqtt.publish(data["topic"].replace("receive", "response"), message)
-            sleep(1)
+            sleep(2)
         return
     else:
         messaging.send_message(receiver, message)
@@ -150,4 +154,3 @@ if __name__ == "__main__":
         app.run(host='0.0.0.0', port=5000, debug=False)
     else:
         app.run(host='0.0.0.0', port=int(cf_port), debug=False)
-

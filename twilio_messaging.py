@@ -17,7 +17,7 @@ client = Client(account_sid, auth_token)
 def send_messages(to_no, messages):
     for message in messages:
         send_message(to_no, message)
-        sleep(1)
+        sleep(3)
 
 def send_message(to_no, message):
     from_no = ""
