@@ -96,3 +96,9 @@ def findCommunity(userID):
         if user['_id'] != userID and user['type'] == TYPE_COMMUNITY and user['receiver'] == IBM_RECEIVER:
             return user['_id']
     return None
+
+def findExpert(userID, type):
+    for user in userDB:
+        if user['_id'] != userID and user['type'] == type and user['receiver'] == IBM_RECEIVER:
+            return user['_id']
+        return None

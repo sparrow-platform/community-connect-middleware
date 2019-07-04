@@ -89,6 +89,13 @@ def listen_input():
             messaging.send_message(receiver, message)
         return str(MessagingResponse())
 
+@app.route("/middleware/connect_expert", methods=['GET', 'POST'])
+def connectExpert():
+    userID = request.values.get('userID', None)
+    type = request.values.get('type', None)
+    expert = connect.connect_expert(userID, type)
+    return expert
+
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
     mqtt.unsubscribe_all()

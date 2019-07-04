@@ -33,6 +33,16 @@ def connect(userID, message):
         else:
             messaging.send_message(userID, "No members are available")
 
+def connect_expert(userID, type):
+    expert = db.findExpert(userID, type)
+    if expert:
+        db.setupConnection(userID, expert)
+        messaging.send_message(userID, "We have connected you to a "+type)
+        messaging.send_message(expert, "We have connected you to a user")
+    else:
+        messaging.send_message(userID, "No "+type+" is available")
+    return expert
+
 def is_stop_requested(message):
     if message.lower() == "disconnect":
         return True
