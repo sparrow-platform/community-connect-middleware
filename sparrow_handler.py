@@ -10,7 +10,7 @@ def is_sparrow_request(message):
         return False
 
 def is_command(message):
-    if connect.is_connect_requested(message) or connect.is_stop_requested(message):
+    if connect.is_stop_requested(message):
         return True
     elif message == "list commands":
         return True
