@@ -94,7 +94,7 @@ def connectExpert():
     userID = request.values.get('userID', None)
     type = request.values.get('type', None)
     expert = connect.connect_expert(userID, type)
-    return expert
+    return str(expert)
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
