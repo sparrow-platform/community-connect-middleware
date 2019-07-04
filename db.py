@@ -99,6 +99,6 @@ def findCommunity(userID):
 
 def findExpert(userID, type):
     for user in usersDB:
-        if user['_id'] != userID and user['type'] == type and user['receiver'] == IBM_RECEIVER:
+        if user['_id'] != userID and user['type'].lower() == type.lower() and user['receiver'] == IBM_RECEIVER:
             return user['_id']
-        return None
+    return None
