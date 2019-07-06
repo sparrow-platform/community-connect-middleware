@@ -96,6 +96,13 @@ def connectExpert():
     expert = connect.connect_expert(userID, type)
     return str(expert)
 
+@app.route("/middleware/send_message", methods=['GET', 'POST'])
+def sendMessage():
+    userID = request.values.get('userID', None)
+    message = request.values.get('message', None)
+    expert = messaging.send_message(userID, message)
+    return str("Success")
+
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
     mqtt.unsubscribe_all()
