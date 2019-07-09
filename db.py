@@ -40,7 +40,11 @@ def getSessionID(userID):
         sessionsDB.create_document(my_dic)
         return session
 
-
+def getUserID(sessionID):
+    for session in sessionsDB:
+        if session['sessionID'] == sessionID:
+            return session['_id']
+    return None
 
 def getReceiver(userID):
     if userID in usersDB:

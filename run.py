@@ -91,10 +91,13 @@ def listen_input():
 
 @app.route("/middleware/connect_expert", methods=['GET', 'POST'])
 def connectExpert():
-    userID = request.values.get('userID', None)
+    sessionID = request.values.get('sessionID', None)
     type = request.values.get('type', None)
-    expert = connect.connect_expert(userID, type)
-    return str(expert)
+    userID = db.getUserID(sessionID)
+    if userID:
+        expert = connect.connect_expert(userID, type)
+        return str(expert)
+    return str("Invalid Session")
 
 @app.route("/middleware/send_message", methods=['GET', 'POST'])
 def sendMessage():
