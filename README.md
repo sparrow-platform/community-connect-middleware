@@ -1,30 +1,23 @@
-# Sparrow Platform
-
 ## INTRODUCTION
 
-- Introduce sparrow middleware (How its similar to Alexa).
+- <b>Sparrow Middleware - The backbone of Sparrow platform</b><br>
+Sparrow Middleware enables users to join and contribute to the Sparrow ecosystem. The users can use existing popular chat apps like WhatsApp, Facebook Messenger, SMS etc or our very own Sparrow App. The Middleware serves as a middleman for all your requests, queries and connections. With our flexible architecture developers are allowed to create their very own apps and integrate with Sparrow. This can make Sparrow similar to Assistants like Alexa without users having to install a new app for it.
 
-  Sparrow Middleware enables users to join and contribute to the Sparrow ecosystem. The users can use existing popular chat apps like WhatsApp, Facebook Messenger, SMS etc or our very own Sparrow App. The Middleware serves as a middleman for all your requests and queries. With our flexible architecture developers are allowed to create their very own apps and integrate with Sparrow. This can make Sparrow similar to Assistants like Alexa without users having to install a new app for it.
+- <b>What does middelware do?</b><br>
+The middleware is Sparrow's interfac to various chat platforms like WhatsApp, Messenger etc. It also is the 'messaging routing engine'. It listens to the messages sent to Sparrow. The requests made are routed to the correct app and the response is served to the user. It also helps users to connect to other users like doctors and community members by routing messages between them. In this way, the middleware not only lets you talk to different apps but also fellow users.
 
-- What does middelware do (Summary in 2 or 3 sentences)
+- <b>How does it help disaster victims?</b><br>
+The Sparrow platform is designed to be your assistant to help overcome a disaster. Be it pre, during or post. The Sparrow-Middleware along with the Sparrow-AI and Sparrow-Net helps with medical assistance and mental well being. Victims without worrying about installing a new app can use the existing apps to join the network. The network can provide medical assistance or connect you to medical professionals from all over the world. During disasters when the communication becomes difficult, due to our integration of offline Mesh networks the victims can get connected to Sparrow. Sparrow
 
-  The middleware connects to various chat platforms like WhatsApp, Messenger etc. It listens to the messages sent to Sparrow. The requests made are routed to the correct app and the response is served to the user. It also helps users to connect to other users like doctors and community members and chat with them. In this way, the middleware not only lets you talk to different apps but also fellow users.
-
-- How does it help disaster victims
-
-  The Sparrow platform is designed to be your assistant to help overcome a disaster. Be it pre, during or post. The Sparrow-Middleware along with the Sparrow-AI and Sparrow-Net helps with medical assistance and mental well being. Victims without worrying about installing a new app can use the existing apps to join the network. The network can provide medical assistance or connect you to medical professionals from all over the world. During disasters when the communication becomes difficult, due to our integration of offline Mesh networks the victims can get connected to Sparrow
-
-- Why is Sparrow different from Alexa
-
-  Sparrow was made with the thought of disaster management and a target of ubiquitous communication. Unlike other assistants, the sparrow can be accessed through any supported chat app. Also, it not only lets you connect to different Apps to serve your requests and queries but it also can connect you to fellow users when needed.
+- <b>Why is Sparrow different from Alexa or Google Now</b><br>
+Sparrow was made with the thought of disaster management and a target of ubiquitous communication. Unlike other assistants, sparrow is ALWAYS there for you - Anywhere, Anytime, Anyhow, On any devices. Unlike other ecosystems, Sparrow is also a communications platform that reaches every person in this world. 
 
 ## OVERALL ARCHITECTURE
 
-- Overall tech diagram (Jay to provide)
+- Overall tech diagram 
 
-- What cloud, what tech stacks/tools, What IBM components, how large instances are need, etc description
-
- Will be added later
+- <b>IBM Cloud at heart</b><br>
+Sparrow is driven by IBM cloud and IBM Watson. Sparrow middleware follows a microservice architechitecture residing on IBM cloud formation. The communications on Sparrow are driven by IBM Watson Assistant and IBM Watson NLP components. 
 
 ## REACHING SPARROW PLATFORM
 
