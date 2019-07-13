@@ -12,36 +12,38 @@ The Sparrow platform is designed to be your assistant to help overcome a disaste
 - <b>Why is Sparrow different from Alexa or Google Now</b><br>
 Sparrow was made with the thought of disaster management and a target of ubiquitous communication. Unlike other assistants, sparrow is ALWAYS there for you - Anywhere, Anytime, Anyhow, On any devices. Unlike other ecosystems, Sparrow is also a communications platform that reaches every person in this world. 
 
-## OVERALL ARCHITECTURE
-
-- Overall tech diagram 
-
-- <b>IBM Cloud at heart</b><br>
-Sparrow is driven by IBM cloud and IBM Watson. Sparrow middleware follows a microservice architechitecture residing on IBM cloud formation. The communications on Sparrow are driven by IBM Watson Assistant and IBM Watson NLP components. 
 
 ## REACHING SPARROW PLATFORM
 
-- Non-tech description of a multi-platform aspect
-  - What users need to do to reach sparrow
+- <b>What users need to do to reach sparrow?<b>  
+Unlike other existing disaster recovery/response apps or systems, you do not need to compulsorily install our app to gain the benefits. We have made Sparrow platform completely ubiquitous and platform-independent. You can get connected as easily as you can chat with your friends. Users can use any popularly supported chatting app to join our network. Just message our bot on the platform and you have reached sparrow. This helps users to contribute or be connected to Sparrow even while doing their own work. Alternatively, we do have our very own app with features helping to reach Sparrow in difficult situations like No internet or even no mobile network.
 
-  Unlike other existing services, you do not need to compulsorily install our app to gain the benefits. We have made attempts to make communication ubiquitous and platform independent. You can get connected as easily as you can chat with your friends. Users can use any popularly supported chatting app to join our network. Just message our bot on the platform and you have reached sparrow. This helps users to contribute or be connected to Sparrow even while doing their own work. Alternatively, we do have our very own app with features helping to reach Sparrow in difficult situations like No internet or even no mobile network.
+- <b>Can I try Sparrow Platform now?</b>
+Currently, we support following chat apps - WhatsApp, Facebook Messenger, SMS. We are working on making sparrow available on other Chat apps. Sparrow is coming to WeChat, Slack, Viber, Telegram by November 2019. The delayed deployment for other platforms is mainly to enable media transfer on Sparrow platform. Sparrow platform is dynamic - Onboarding a new chat platform is super simple! Reach out to us if you want Sparrow to be accessible through any platform not mentioned in our 'coming soon' list.
 
--
-  - What all platforms are covered now, what all can be easily added, etc
 
-  Currently, we support chat apps like WhatsApp, Facebook Messenger, SMS. With our flexible architecture adding a new platform isn&#39;t a huge task. We can easily integrate any platform which is open for developers to send and receive messages. Such platforms can be Slack, WeChat, etc
+## OVERALL ARCHITECTURE
+- <b>IBM Cloud at heart</b> </br>
+Sparrow is driven by IBM cloud and IBM Watson. Sparrow middleware follows a Python Flask based microservice architechitecture residing on IBM cloud formation. The communications on Sparrow are driven by IBM Watson Assistant and IBM Watson NLP components. 
 
-- Technical overview:
-  - Architecture diagram (whatsapp etc to twilio to middleware)
+- <b>Messaging Interfaces</b></br>
+Sparrow middleware is currently based on combination of Twilio (https://www.twilio.com/), chat app webhooks and MQTT for getting messages various chat platforms. We plan to phase out Twilio and move to Unification engine (https://unificationengine.com/) by v0.2 release of Sparrow Platform. Twilio / Chat app webhooks point to Sparrow middleware APIs to handles messages. The messages originate from chat apps reach twilio / webhook interfaces, and are then forwarded to Sparrow APIs. Similarly messages from mesh networks / Sparrow App reach Sparrow Middleware through MQTT.
 
- ![](data:image/*;base64,)
+- <b>Handling messages</b></br>
+A. Handling at Middleware layer</br>
+Sparrow middleware featurs implementation involves 2 stages. The Middleware itself intercepts the incoming messges to deliver certain communication related features. These features are essentially the ones triggered by '@sparrow' commands in messages. </br></br>
+B. Handling through IBM watson assistant</br>
+The Applet ecosystem and Sparrow features like SparrowAI are driven by IBM watson assistant. The fundamental idea behind all Sparrow Applets is that these Applets will essentially trigger dialogues in Watson Assistant. We are creating Sparrow App development portal as an interface to Sparrow's IBM Watson assistant. 
+<br>
+Here is a link to our Watson assistant related codes repository - https://github.com/sparrow-platform/watson-cloud-functions
 
--
-  - Messaging aggregators (Twilio/IBM botkit) - What does it do, how to add new messaging support
+- <b>Routing replies back to users</b><br>
+Sparrow middleware sends back replies through the sames interfaces as message consumption interfaces. 
 
-  The messages received from different platforms are redirected to our Webhook in our specified format. The Message aggregators make this easy by listening to all the messages received on various platforms and redirect them to our webhook. There are various commercial platforms serving this like Twilio, UIB&#39;s Unification Engine. Such platforms help to add support for various platforms easily and quickly.
+- <b>Stateful behaviour</b><br>
+Sparrow APIs themselves are stateless - the only input they need is userIDs and messages. Session and stateful behaivour is achieved by interfacing the API with Database. We use IBM Cloudant for managing all state and session variables. 
 
-  Adding new messaging support can be done by configuring the app on Twilio. Twilio supports various Channels to integrate new platforms. Just configuring them and adding the Webhook will do our work. Moreover Twilio provides SDK with a simple generalized method to send messages back to users.
+
 
 -
   - Custom MQTT aspect
