@@ -1,3 +1,5 @@
+API is live at https://sparrow-community-connect-middleware-noisy-bandicoot.mybluemix.net
+<br><br>
 ## INTRODUCTION
 
 - <b>Sparrow Middleware - The backbone of Sparrow platform</b><br>
