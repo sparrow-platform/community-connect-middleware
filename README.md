@@ -15,7 +15,7 @@ Sparrow was made with the thought of disaster management and a target of ubiquit
 
 ## REACHING SPARROW PLATFORM
 
-- <b>What users need to do to reach sparrow?<b>  
+- <b>What users need to do to reach sparrow?</b>  
 Unlike other existing disaster recovery/response apps or systems, you do not need to compulsorily install our app to gain the benefits. We have made Sparrow platform completely ubiquitous and platform-independent. You can get connected as easily as you can chat with your friends. Users can use any popularly supported chatting app to join our network. Just message our bot on the platform and you have reached sparrow. This helps users to contribute or be connected to Sparrow even while doing their own work. Alternatively, we do have our very own app with features helping to reach Sparrow in difficult situations like No internet or even no mobile network.
 
 - <b>Can I try Sparrow Platform now?</b>
@@ -33,9 +33,7 @@ Sparrow middleware is currently based on combination of Twilio (https://www.twil
 A. Handling at Middleware layer</br>
 Sparrow middleware featurs implementation involves 2 stages. The Middleware itself intercepts the incoming messges to deliver certain communication related features. These features are essentially the ones triggered by '@sparrow' commands in messages. </br></br>
 B. Handling through IBM watson assistant</br>
-The Applet ecosystem and Sparrow features like SparrowAI are driven by IBM watson assistant. The fundamental idea behind all Sparrow Applets is that these Applets will essentially trigger dialogues in Watson Assistant. We are creating Sparrow App development portal as an interface to Sparrow's IBM Watson assistant. 
-<br>
-Here is a link to our Watson assistant related codes repository - https://github.com/sparrow-platform/watson-cloud-functions
+The Applet ecosystem and Sparrow features like SparrowAI are driven by IBM watson assistant. The fundamental idea behind all Sparrow Applets is that these Applets will essentially trigger dialogues in Watson Assistant. We are creating Sparrow App development portal as an interface to Sparrow's IBM Watson assistant. Here is a link to our Watson assistant related codes repository - https://github.com/sparrow-platform/watson-cloud-functions
 
 - <b>Routing replies back to users</b><br>
 Sparrow middleware sends back replies through the sames interfaces as message consumption interfaces. 
@@ -43,56 +41,91 @@ Sparrow middleware sends back replies through the sames interfaces as message co
 - <b>Stateful behaviour</b><br>
 Sparrow APIs themselves are stateless - the only input they need is userIDs and messages. Session and stateful behaivour is achieved by interfacing the API with Database. We use IBM Cloudant for managing all state and session variables. 
 
+- <b>Integrate Sparrow in your messaging app</b>
+Want to create an app and make Sparrow a part of it? Sparrow platoform clients are essentially MQTT clients that allow you to create Chat interfaces interacting with Sparrow  backend.
 
+## ROUTING TO EXPERTS
 
--
-  - Custom MQTT aspect
+- <b>Experts registration</b><br>
+Sparrow allows experts all over the world to participate and join the network. Experts at any point can register themselves as expert medical professionals or even community members. Just message Sparrow that you want to register and the chatbot will enrol you with its friendly chat. Once the expert has made the request we validate the information provided and add the expert badge.
 
-  Apart from Webhooks Sparrow can do messaging using MQTT protocol. This opens us to offline networks, mesh networks, IoT platforms, Project Owl, etc.
+- <b>How experts and users are connected</b><br>
+The user in need for expert attention can just send a message to sparrow saying to connect to expert. Once a user asks for connecting to a expert the Sparrow checks with the user requirements and assigns an expert to it. Sparrow creates a link between the user and the expert. This is done by routing the messages from user to expert and expert to users through the sparrow channel. An expert can serve only a single user at a time. This ensures providing users with the special attention that they need.
 
-ROUTING TO EXPERTS
+- <b>Conversations with Experts</b><br>
+On a successful connection, both the user and the expert are notified. From then messages from both parties are routed to the other party. To disconnect either party can message sparrow to disconnect by messaging '@sparrow disconnect'. While being connected to another user, one can talk to sparrow by using @sparrow. All such messages are routed to the sparrow engine.
 
-- Non-tech description (What does this component do?)
-  - How experts register, what all is captured during registration, etc
+- <b>Experts Pool</b><br>
+Once the request of user to connect is received, sparrow tries to find an idle expert matching the requirements of the user from the pool of experts maintained in our database. The assignment of the expert is one to one so users can get special attention. Our databases maintain what connections are active and the messages are routed to the respective users after referring to this. The connection is established by updating this database with proper receiving parties
 
-  Sparrow allows experts all over the world to participate and join the network. Experts at any point can register themselves as expert medical professionals or even community members. Just message Sparrow that you want to register and the chatbot will enrol you with its friendly chat. Once the expert has made the request we validate the information provided and add the expert badge.
+- <b>Ading Experts to Pool</b><br>
+Upon verifying the information provided for registration we add them to the pool of experts. If the expert is assigned to a user it is marked as busy or else considered as idle. Other information like the field of expertise, the experience is maintained in the database. When a connection request arrives the experts from this pool are assigned after matching the required criteria
 
--
-  - How experts and users are connected
+- <b>How are sessions/connections maintained</b><br>
+We maintain the connection state of every user and experts. If the user/expert is connected the database points to the user/expert to whom it is connected. These entries are updated upon every new connection and cleared on disconnection. This connection state helps to route messages to the correct receiver.
 
-  The user in need for expert attention can just send a message to sparrow saying to connect to expert. Once a user asks for connecting to a expert the Sparrow checks with the user requirements and assigns an expert to it. Sparrow creates a link between the user and the expert. This is done by routing the messages from user to expert and expert to users through the sparrow channel. An expert can serve only a single user at a time. This ensures providing users with the special attention that they need.
+## App ecosystem
+- <b>IBM Watson at heart</b><br>
+Sparrow Applet ecosystem is essentially a wrapper/interface built over Sparrow's Watson Assistant. Sparrow can deliver apps through 2 mechanisms - 
+<br><br>
+<b>A. Adding new dialog to Sparrow's Watson assistant</b><br>
+This is extremely easy - IBM Watson Dialogue is triggered when certain question is asked. Every dialog will represent one App - Sparrow AI and Sparrow Net are such applicatins on Sparrow platform.
+<br><br>
+<b>B. Redirecting Sparrow to new Watson Assistant instance (Application's Watson assistant instance)</b><br>
+This is what we call the 'Sparrow Ecosystem'. Sparrow middleware maintains a 'receiver' variable for every user. Default receive is SPARROW_IBM_WATSON. The middleware detects this value and the redirects every message to the corresponding IBM Watson assistant (By checking watson endpoint from database). We can easily add many more such receiver variables in the key-value map. For example, a receiver can be AMERICAN_RED_CROSS that redirects all user communication to american red cross Sparrow Applet. Due to nature of sessions on Sparrow platform, adding and navigating between different applets will be super easy. To change the app user is interacting with, all the users need to do is trigger '@sparrow' commands to change the applet they interact with! 
 
--
-  - How conversations start, end, etc
+<p align="center">
+<img max-height=500  src="https://raw.githubusercontent.com/sparrow-platform/community-connect-middleware/master/middlewareArchitecture.png"/>
+</p>
 
-  On a successful connection, both the user and the expert are notified. From then messages from both parties are routed to the other party. To disconnect either party can message sparrow to disconnect by messaging &quot;@sparrow disconnect&quot;. While being connected to another user, one can talk to sparrow by using @sparrow. All such messages are routed to the sparrow engine.
+## API Structure
+- /middleware/receive
+```
+Message entry point for Sparrow platform 
 
-- Technical overview
-  - How are connections established
+Request parameters:
+"From" - Sparrow UserID for messenger sender
+"Body" - Message content
+```
 
-  Once the request of user to connect is received, sparrow tries to find an idle expert matching the requirements of the user from the pool of experts maintained in our database. The assignment of the expert is one to one so users can get special attention. Our databases maintain what connections are active and the messages are routed to the respective users after referring to this. The connection is established by updating this database with proper receiving parties
+- /middleware/connect_expert
+```
+Connects user to a expert
 
--
-  - How are experts pool maintained
+Request parameters:
+"sessionID" - Sparrow SessionID for the user
+"type" - Type of expert to connect with
+```
 
-  Upon verifying the information provided for registration we add them to the pool of experts. If the expert is assigned to a user it is marked as busy or else considered as idle. Other information like the field of expertise, the experience is maintained in the database. When a connection request arrives the experts from this pool are assigned after matching the required criteria
+- /middleware/send_message
+```
+Sends message to some user
 
--
-  - How are sessions/connections maintained
+Request parameters:
+"userID" - Sparrow userID for the receiver
+"message" - Message content
+```
 
-  We maintain the connection state of every user and experts. If the user/expert is connected the database points to the user/expert to whom it is connected. These entries are updated upon every new connection and cleared on disconnection. This connection state helps to route messages to the correct receiver.
+- /visual_recognition/text
+```
+Returns content from media
 
-ROUTING TO APPS
+Request parameters:
+"image_url" - URL to media to extract content from
+```
 
-- Non-tech description (What does this component do?)
-  - What are apps
-  - How will they help users
-  - How can users reach apps
-  - What do apps do
-- Technical overview
-  - How are users connected to apps
-  - How are sessions maintained
-- How can developers add apps to Sparrow
-  - How to add new apps
-  - How are apps triggered
-  - How users can interact with apps (Just ask questions, sparrow finds right app to answer the questions)
+- /nlp/sentiment
+```
+Returns sentiment of text
+
+Request parameters:
+"text" - Text to extract sentiment from
+```
+
+- /nlp/entities
+```
+Extracts entities from text
+
+Request parameters:
+"text" - Text to extract entities from
+```
