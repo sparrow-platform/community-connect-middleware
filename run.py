@@ -35,7 +35,7 @@ cf_port = os.getenv("PORT")
 
 @app.route('/')
 def route():
-    return "hello ibm new"
+    return "chirrup chirrup....You have reached Sparrow API"
 
 @app.route("/middleware/receive", methods=['GET', 'POST'])
 def listen_input():
