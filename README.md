@@ -25,17 +25,32 @@ Currently, we support following chat apps - WhatsApp, Facebook Messenger, SMS. W
 
 
 ## OVERALL ARCHITECTURE
+
+<p align="center">
+<img max-height=500  src="https://raw.githubusercontent.com/sparrow-platform/design/master/flow%20diagrams/flow1.jpg"/>
+</p>
+
 - <b>IBM Cloud at heart</b> </br>
 Sparrow is driven by IBM cloud and IBM Watson. Sparrow middleware follows a Python Flask based microservice architechitecture residing on IBM cloud formation. The communications on Sparrow are driven by IBM Watson Assistant and IBM Watson NLP components. 
 
 - <b>Messaging Interfaces</b></br>
 Sparrow middleware is currently based on combination of Twilio (https://www.twilio.com/), chat app webhooks and MQTT for getting messages various chat platforms. We plan to phase out Twilio and move to Unification engine (https://unificationengine.com/) by v0.2 release of Sparrow Platform. Twilio / Chat app webhooks point to Sparrow middleware APIs to handles messages. The messages originate from chat apps reach twilio / webhook interfaces, and are then forwarded to Sparrow APIs. Similarly messages from mesh networks / Sparrow App reach Sparrow Middleware through MQTT.
 
+<p align="center">
+<img max-height=500  src="https://raw.githubusercontent.com/sparrow-platform/design/master/flow%20diagrams/twilio_messaging.jpg"/>
+</p>
+
+
+
 - <b>Handling messages</b></br>
 A. Handling at Middleware layer</br>
 Sparrow middleware featurs implementation involves 2 stages. The Middleware itself intercepts the incoming messges to deliver certain communication related features. These features are essentially the ones triggered by '@sparrow' commands in messages. </br></br>
 B. Handling through IBM watson assistant</br>
 The Applet ecosystem and Sparrow features like SparrowAI are driven by IBM watson assistant. The fundamental idea behind all Sparrow Applets is that these Applets will essentially trigger dialogues in Watson Assistant. We are creating Sparrow App development portal as an interface to Sparrow's IBM Watson assistant. Here is a link to our Watson assistant related codes repository - https://github.com/sparrow-platform/watson-cloud-functions
+
+<p align="center">
+<img max-height=500  src="https://github.com/sparrow-platform/design/blob/master/flow%20diagrams/chatbot.jpg?raw=true"/>
+</p>
 
 - <b>Routing replies back to users</b><br>
 Sparrow middleware sends back replies through the sames interfaces as message consumption interfaces. 
@@ -54,6 +69,10 @@ Sparrow allows experts all over the world to participate and join the network. E
 - <b>How experts and users are connected</b><br>
 The user in need for expert attention can just send a message to sparrow saying to connect to expert. Once a user asks for connecting to a expert the Sparrow checks with the user requirements and assigns an expert to it. Sparrow creates a link between the user and the expert. This is done by routing the messages from user to expert and expert to users through the sparrow channel. An expert can serve only a single user at a time. This ensures providing users with the special attention that they need.
 
+<p align="center">
+<img max-height=500  src="https://raw.githubusercontent.com/sparrow-platform/design/master/flow%20diagrams/connecting_to_expert.jpg"/>
+</p>
+
 - <b>Conversations with Experts</b><br>
 On a successful connection, both the user and the expert are notified. From then messages from both parties are routed to the other party. To disconnect either party can message sparrow to disconnect by messaging '@sparrow disconnect'. While being connected to another user, one can talk to sparrow by using @sparrow. All such messages are routed to the sparrow engine.
 
@@ -65,6 +84,11 @@ Upon verifying the information provided for registration we add them to the pool
 
 - <b>How are sessions/connections maintained</b><br>
 We maintain the connection state of every user and experts. If the user/expert is connected the database points to the user/expert to whom it is connected. These entries are updated upon every new connection and cleared on disconnection. This connection state helps to route messages to the correct receiver.
+
+<p align="center">
+<img max-height=500  src="https://github.com/sparrow-platform/design/blob/master/flow%20diagrams/db.jpg"/>
+</p>
+
 
 ## App ecosystem
 - <b>IBM Watson at heart</b><br>
